@@ -1,0 +1,360 @@
+--------------------
+./configure
+Sat Apr 16 00:11:01 CEST 2016
+Checking for gcc...
+=== ztest39391.c ===
+extern int getchar();
+int hello() {return getchar();}
+===
+gcc -c ztest39391.c
+... using gcc
+
+Checking for obsessive-compulsive compiler options...
+=== ztest39391.c ===
+int foo() { return 0; }
+===
+gcc -c -I/home/aflit001/lib/include ztest39391.c
+
+Checking for shared library support...
+=== ztest39391.c ===
+extern int getchar();
+int hello() {return getchar();}
+===
+gcc -w -c -I/home/aflit001/lib/include -fPIC ztest39391.c
+gcc -shared -Wl,-soname,libz.so.1,--version-script,zlib.map -I/home/aflit001/lib/include -fPIC -o ztest39391.so ztest39391.o
+Building shared library libz.so.1.2.8 with gcc.
+
+=== ztest39391.c ===
+#include <sys/types.h>
+off64_t dummy = 0;
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest39391.c
+Checking for off64_t... Yes.
+Checking for fseeko... Yes.
+
+=== ztest39391.c ===
+#include <string.h>
+#include <errno.h>
+int main() { return strlen(strerror(errno)); }
+===
+gcc -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 -o ztest39391 ztest39391.c
+Checking for strerror... Yes.
+
+=== ztest39391.c ===
+#include <unistd.h>
+int main() { return 0; }
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest39391.c
+Checking for unistd.h... Yes.
+
+=== ztest39391.c ===
+#include <stdarg.h>
+int main() { return 0; }
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest39391.c
+Checking for stdarg.h... Yes.
+
+=== ztest39391.c ===
+#include <stdio.h>
+#include <stdarg.h>
+#include "zconf.h"
+int main()
+{
+#ifndef STDC
+  choke me
+#endif
+  return 0;
+}
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest39391.c
+Checking whether to use vs[n]printf() or s[n]printf()... using vs[n]printf().
+
+=== ztest39391.c ===
+#include <stdio.h>
+#include <stdarg.h>
+int mytest(const char *fmt, ...)
+{
+  char buf[20];
+  va_list ap;
+  va_start(ap, fmt);
+  vsnprintf(buf, sizeof(buf), fmt, ap);
+  va_end(ap);
+  return 0;
+}
+int main()
+{
+  return (mytest("Hello%d\n", 1));
+}
+===
+gcc -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 -o ztest39391 ztest39391.c
+Checking for vsnprintf() in stdio.h... Yes.
+
+=== ztest39391.c ===
+#include <stdio.h>
+#include <stdarg.h>
+int mytest(const char *fmt, ...)
+{
+  int n;
+  char buf[20];
+  va_list ap;
+  va_start(ap, fmt);
+  n = vsnprintf(buf, sizeof(buf), fmt, ap);
+  va_end(ap);
+  return n;
+}
+int main()
+{
+  return (mytest("Hello%d\n", 1));
+}
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest39391.c
+Checking for return value of vsnprintf()... Yes.
+
+=== ztest39391.c ===
+#define ZLIB_INTERNAL __attribute__((visibility ("hidden")))
+int ZLIB_INTERNAL foo;
+int main()
+{
+  return 0;
+}
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest39391.c
+Checking for attribute(visibility) support... Yes.
+
+ALL = static shared all64
+AR = ar
+ARFLAGS = rc
+CC = gcc
+CFLAGS = -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN
+CPP = gcc -E
+EXE =
+LDCONFIG = ldconfig
+LDFLAGS = -L/home/aflit001/lib
+LDSHARED = gcc -shared -Wl,-soname,libz.so.1,--version-script,zlib.map
+LDSHAREDLIBC = -lc
+OBJC = $(OBJZ) $(OBJG)
+PIC_OBJC = $(PIC_OBJZ) $(PIC_OBJG)
+RANLIB = ranlib
+SFLAGS = -I/home/aflit001/lib/include -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN
+SHAREDLIB = libz.so
+SHAREDLIBM = libz.so.1
+SHAREDLIBV = libz.so.1.2.8
+STATICLIB = libz.a
+TEST = all teststatic testshared test64
+VER = 1.2.8
+Z_U4 =
+exec_prefix = ${prefix}
+includedir = ${prefix}/include
+libdir = ${exec_prefix}/lib
+mandir = ${prefix}/share/man
+prefix = /usr/local
+sharedlibdir = ${libdir}
+uname = Linux
+--------------------
+
+
+--------------------
+./configure --static -arch x86_64
+Sat Apr 16 00:20:35 CEST 2016
+unknown option: -arch
+./configure --help for help
+** ./configure aborting.
+--------------------
+
+
+--------------------
+./configure --static -archs x86_64
+Sat Apr 16 00:20:42 CEST 2016
+unknown option: -archs
+./configure --help for help
+** ./configure aborting.
+--------------------
+
+
+--------------------
+./configure --help
+Sat Apr 16 00:20:51 CEST 2016
+usage:
+  configure [--const] [--zprefix] [--prefix=PREFIX]  [--eprefix=EXPREFIX]
+    [--static] [--64] [--libdir=LIBDIR] [--sharedlibdir=LIBDIR]
+    [--includedir=INCLUDEDIR] [--archs="-arch i386 -arch x86_64"]
+--------------------
+./configure --static --archs x86_64
+Sat Apr 16 00:21:00 CEST 2016
+unknown option: --archs
+./configure --help for help
+** ./configure aborting.
+--------------------
+
+
+--------------------
+./configure --static --archs=x86_64
+Sat Apr 16 00:21:05 CEST 2016
+Checking for gcc...
+=== ztest58455.c ===
+extern int getchar();
+int hello() {return getchar();}
+===
+gcc -c ztest58455.c
+... using gcc
+
+Checking for obsessive-compulsive compiler options...
+=== ztest58455.c ===
+int foo() { return 0; }
+===
+gcc -c -I/home/aflit001/lib/include x86_64 ztest58455.c
+gcc: error: x86_64: No such file or directory
+(exit code 1)
+Compiler error reporting is too harsh for ./configure (perhaps remove -Werror).
+** ./configure aborting.
+--------------------
+
+
+--------------------
+./configure --static
+Sat Apr 16 00:21:29 CEST 2016
+Checking for gcc...
+=== ztest59404.c ===
+extern int getchar();
+int hello() {return getchar();}
+===
+gcc -c ztest59404.c
+... using gcc
+
+Checking for obsessive-compulsive compiler options...
+=== ztest59404.c ===
+int foo() { return 0; }
+===
+gcc -c -I/home/aflit001/lib/include ztest59404.c
+
+Building static library libz.a version 1.2.8 with gcc.
+
+=== ztest59404.c ===
+#include <sys/types.h>
+off64_t dummy = 0;
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest59404.c
+Checking for off64_t... Yes.
+Checking for fseeko... Yes.
+
+=== ztest59404.c ===
+#include <string.h>
+#include <errno.h>
+int main() { return strlen(strerror(errno)); }
+===
+gcc -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 -o ztest59404 ztest59404.c
+Checking for strerror... Yes.
+
+=== ztest59404.c ===
+#include <unistd.h>
+int main() { return 0; }
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest59404.c
+Checking for unistd.h... Yes.
+
+=== ztest59404.c ===
+#include <stdarg.h>
+int main() { return 0; }
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest59404.c
+Checking for stdarg.h... Yes.
+
+=== ztest59404.c ===
+#include <stdio.h>
+#include <stdarg.h>
+#include "zconf.h"
+int main()
+{
+#ifndef STDC
+  choke me
+#endif
+  return 0;
+}
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest59404.c
+Checking whether to use vs[n]printf() or s[n]printf()... using vs[n]printf().
+
+=== ztest59404.c ===
+#include <stdio.h>
+#include <stdarg.h>
+int mytest(const char *fmt, ...)
+{
+  char buf[20];
+  va_list ap;
+  va_start(ap, fmt);
+  vsnprintf(buf, sizeof(buf), fmt, ap);
+  va_end(ap);
+  return 0;
+}
+int main()
+{
+  return (mytest("Hello%d\n", 1));
+}
+===
+gcc -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 -o ztest59404 ztest59404.c
+Checking for vsnprintf() in stdio.h... Yes.
+
+=== ztest59404.c ===
+#include <stdio.h>
+#include <stdarg.h>
+int mytest(const char *fmt, ...)
+{
+  int n;
+  char buf[20];
+  va_list ap;
+  va_start(ap, fmt);
+  n = vsnprintf(buf, sizeof(buf), fmt, ap);
+  va_end(ap);
+  return n;
+}
+int main()
+{
+  return (mytest("Hello%d\n", 1));
+}
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest59404.c
+Checking for return value of vsnprintf()... Yes.
+
+=== ztest59404.c ===
+#define ZLIB_INTERNAL __attribute__((visibility ("hidden")))
+int ZLIB_INTERNAL foo;
+int main()
+{
+  return 0;
+}
+===
+gcc -c -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 ztest59404.c
+Checking for attribute(visibility) support... Yes.
+
+ALL = static all64
+AR = ar
+ARFLAGS = rc
+CC = gcc
+CFLAGS = -I/home/aflit001/lib/include -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN
+CPP = gcc -E
+EXE =
+LDCONFIG = ldconfig
+LDFLAGS = -L/home/aflit001/lib
+LDSHARED = gcc
+LDSHAREDLIBC = -lc
+OBJC = $(OBJZ) $(OBJG)
+PIC_OBJC = $(PIC_OBJZ) $(PIC_OBJG)
+RANLIB = ranlib
+SFLAGS = -I/home/aflit001/lib/include -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN
+SHAREDLIB =
+SHAREDLIBM =
+SHAREDLIBV =
+STATICLIB = libz.a
+TEST = all teststatic test64
+VER = 1.2.8
+Z_U4 =
+exec_prefix = ${prefix}
+includedir = ${prefix}/include
+libdir = ${exec_prefix}/lib
+mandir = ${prefix}/share/man
+prefix = /usr/local
+sharedlibdir = ${libdir}
+uname = Linux
+--------------------
+
+

@@ -1,0 +1,52 @@
+#kentSrc = ../..
+
+#SOCKETLIB=-lxnet
+
+#A = bedToBigBed
+
+# include $(kentSrc)/inc/userApp.mk
+
+# L += -lm -lz ${SOCKETLIB}
+
+CS=$(wildcard *.c)
+HS=$(wildcard *.h)
+OS=$(patsubst %.c,%.o,$(CS))
+
+
+#gcc -O -g  -Wall -Wformat -Wimplicit -Wreturn-type -Wuninitialized -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_x86_64 -DUSE_SSL   -Wall -Wformat -Wimplicit -Wreturn-type -Wuninitialized -I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc -I/include -I/usr/include/libpng12  -o bedToBigBed.o -c bedToBigBed.c
+#gcc -O -g -o bedToBigBed bedToBigBed.o    ../../lib/x86_64/jkweb.a -L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -ldl -lstdc++ -lrt -lm  -pthread -L/lib -lssl -lcrypto -L/usr/lib/x86_64-linux-gnu -lpng12 -lm -lz  -lm
+
+all: bedToBigBed
+
+clean:
+	rm *.o || true
+	rm bedToBigBed || true
+
+#HS=common.h aliType.h asParse.h basicBed.h bbiFile.h bigBed.h bits.h bPlusTree.h cirTree.h dnaseq.h dnautil.h dystring.h fuzzyFind.h gfxPoly.h hash.h linefile.h localmem.h memgfx.h obscure.h options.h psl.h rangeTree.h rbTree.h sig.h sqlNum.h udc.h zlibFace.h
+
+
+%.o: %.c
+	@#gcc -O -g  -Wall -Wformat -Wimplicit -Wreturn-type -Wuninitialized -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_x86_64 -DUSE_SSL   -Wall -Wformat -Wimplicit -Wreturn-type -Wuninitialized -I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc -I/include -I/usr/include/libpng12  -o annoFormatTab.o -c annoFormatTab.c	
+	gcc -O -g    -Wall -Wformat -Wimplicit -Wreturn-type -Wuninitialized -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_x86_64 -fPIC -DPIC -I./ -I/include -o $@ -c $^ -lz -lm
+
+#-I/include 
+
+
+#bedToBigBed.o: bedToBigBed.c
+#	echo $(HS)
+#	gcc -O -g  -Wall -Wformat -Wimplicit -Wreturn-type -Wuninitialized -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_x86_64 -DUSE_SSL -Wall -Wformat -Wimplicit -Wreturn-type -Wuninitialized -I/include -I/usr/include/libpng12 -o bedToBigBed.o bedToBigBed.c $(HS)
+
+bedToBigBed: $(OS)
+	gcc -O -g -L/usr/lib/x86_64-linux-gnu -L./ -L/lib -L/usr/lib/x86_64-linux-gnu -I./ \
+options.o binRange.o ffAli.o dnautil.o aliType.o psl.o sqlList.o basicBed.o tokenizer.o asParse.o zlibFace.o bPlusTree.o bbiWrite.o sqlNum.o common.o obscure.o rbTree.o rangeTree.o dlist.o localmem.o bits.o base64.o https.o kxTok.o intExp.o filePath.o servmsII.o servpws.o servCrunx.o servBrcMcw.o servcl.o servcis.o portimpl.o pipeline.o linefile.o mime.o dystring.o cheapcgi.o internet.o net.o wildcmp.o osunix.o verbose.o udc.o cirTree.o hash.o errAbort.o memalloc.o bedToBigBed.o -o $@ \
+-lpthread -lz -lm -ldl -lstdc++ -lrt
+
+
+
+#bigBed.o colHash.o dnaseq.o fuzzyFind.o gemfont.o gfxPoly.o hex.o emgfx.o vGfx.o
+
+#-lssl -lcrypto 
+#-lpng12 
+
+#-lmysqlclient 
+#../../lib/x86_64/jkweb.a 

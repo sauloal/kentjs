@@ -1,0 +1,25 @@
+GCC?=gcc
+
+CS=$(wildcard *.c)
+OS=$(patsubst %.c,%.o,$(CS))
+
+all: bedToBigBed bedToBigBed_static
+
+clean:
+	rm *.o || true
+	rm bedToBigBed || true
+	rm bedToBigBed_static || true
+
+%.o: %.c
+	$(GCC) -O -g    -Wall -Wformat -Wimplicit -Wreturn-type -Wuninitialized -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_x86_64 -fPIC -DPIC -I./ -I/include -o $@ -c $^
+
+bedToBigBed: $(OS)
+	$(GCC) -O -g -L/usr/lib/x86_64-linux-gnu -L./ -L/lib -L/usr/lib/x86_64-linux-gnu -I./ -o $@ $^ -lz -lpthread -lm
+
+bedToBigBed_static: $(CS)
+	$(GCC) -O -g -static -L/usr/lib/x86_64-linux-gnu -L./ -L/lib -L/usr/lib/x86_64-linux-gnu -I./ -o $@ $^ -lz -lpthread -lm
+
+
+#options.o binRange.o ffAli.o dnautil.o aliType.o psl.o sqlList.o basicBed.o tokenizer.o asParse.o zlibFace.o bPlusTree.o bbiWrite.o sqlNum.o common.o obscure.o rbTree.o rangeTree.o dlist.o localmem.o bits.o base64.o https.o kxTok.o intExp.o filePath.o servmsII.o servpws.o servCrunx.o servBrcMcw.o servcl.o servcis.o portimpl.o pipeline.o linefile.o mime.o dystring.o cheapcgi.o internet.o net.o wildcmp.o osunix.o verbose.o udc.o cirTree.o hash.o errAbort.o memalloc.o bedToBigBed.o \
+# -ldl -lstdc++
+

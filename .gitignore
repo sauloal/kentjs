@@ -1,0 +1,8 @@
+*.o
+*.tar.gz
+bed/
+bedToBigBed2/
+inc/
+jksrc.zip
+kent/
+
