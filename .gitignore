@@ -1,8 +1,6 @@
-*.o
-*.tar.gz
-bed/
+data/
 bedToBigBed2/
 inc/
 jksrc.zip
 kent/
-
+old/

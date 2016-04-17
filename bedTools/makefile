@@ -2,7 +2,7 @@ GCC?=gcc
 EXT?=
 LIBS?=-lz -lpthread -lm
 
-OPTS?=-O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_x86_64
+OPTS?=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_x86_64
 
 #LINKS?=-L./libs -L./global -L./extra -L/lib -L/usr/lib/x86_64-linux-gnu 
 #INCLUDES?=-I./libs -I./global -I./extra -I/lib -I/usr/lib/x86_64-linux-gnu
@@ -13,7 +13,33 @@ INCLUDES?=-I./libs -I/lib -I/usr/include/ -I/usr/lib/x86_64-linux-gnu
 
 WARNINGS?=-Wall -Wformat -Wimplicit -Wreturn-type
 
-ZLIB=zlib-1.2.8/
+PREJS=
+POSJS=
+
+ifneq ("$(wildcard pre.js)","")
+PREJS=--pre-js  pre.js
+endif
+
+ifneq ("$(wildcard post.js)","")
+POSJS=--post-js post.js
+endif
+
+
+
+
+#ZLIB=zlib-1.2.8/
+
+
+
+#https://github.com/kripken/emscripten/blob/master/src/settings.js
+EMCCOPTS=-s USE_ZLIB=1 -s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=1 -s FORCE_FILESYSTEM=1
+# --separate-asm
+#-s MODULARIZE=1
+#-s USE_PTHREADS=1 
+#-s USE_ZLIB=1 
+
+
+
 
 
 
@@ -72,7 +98,7 @@ print:
 #$(GCC) -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN     -c -o gzread.o   gzread.c
 #$(GCC) -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN     -c -o gzwrite.o  gzwrite.c
 
-ZLIBCS=$(ZLIB)adler32.c $(ZLIB)crc32.c $(ZLIB)deflate.c $(ZLIB)infback.c $(ZLIB)inffast.c $(ZLIB)inflate.c $(ZLIB)inftrees.c $(ZLIB)trees.c $(ZLIB)zutil.c $(ZLIB)compress.c $(ZLIB)uncompr.c $(ZLIB)gzclose.c $(ZLIB)gzlib.c $(ZLIB)gzread.c $(ZLIB)gzwrite.c
+#ZLIBCS=$(ZLIB)adler32.c $(ZLIB)crc32.c $(ZLIB)deflate.c $(ZLIB)infback.c $(ZLIB)inffast.c $(ZLIB)inflate.c $(ZLIB)inftrees.c $(ZLIB)trees.c $(ZLIB)zutil.c $(ZLIB)compress.c $(ZLIB)uncompr.c $(ZLIB)gzclose.c $(ZLIB)gzlib.c $(ZLIB)gzread.c $(ZLIB)gzwrite.c
 
 
 
@@ -91,13 +117,18 @@ $(EXE): %$(EXT) : %.o $(OS)
 
 
 ifeq ($(EXT),.js)
-$(STA): %_static$(EXT) : %.c $(CS) $(ZLIBCS)
-	$(GCC) $(OPTS) -O -g -static $(WARNINGS)             $(LINKS) $(INCLUDES) -I$(ZLIB) -o $@      $^ $(LIBS) $(ZLIBCS)
-	$(GCC) $(OPTS) -O -g -static $(WARNINGS)             $(LINKS) $(INCLUDES) -I$(ZLIB) -o $@.html $^ $(LIBS) $(ZLIBCS)
+$(STA): %_static$(EXT) : %.c $(CS)
+	$(GCC) $(EMCCOPTS) $(OPTS) -O -Oz -static $(WARNINGS)             $(LINKS) $(INCLUDES)           -o $@      $^ $(LIBS) $(PREJS) $(POSJS)
+	$(GCC) $(EMCCOPTS) $(OPTS) -O -Oz -static $(WARNINGS)             $(LINKS) $(INCLUDES)           -o $@.html $^ $(LIBS)
+#	$(GCC) $(EMCCOPTS) $(OPTS) -O -Oz -static $(WARNINGS)             $(LINKS) $(INCLUDES) -I$(ZLIB) -o $@      $^ $(LIBS)
+#	$(GCC) $(EMCCOPTS) $(OPTS) -O -Oz -static $(WARNINGS)             $(LINKS) $(INCLUDES) -I$(ZLIB) -o $@.html $^ $(LIBS)
+# $(ZLIBCS)
+#-s EXPORT_NAME="$(subst _static$(EXT),,$@)" 
+
+
 else
 $(STA): %_static$(EXT) : %.c $(CS)
-	$(GCC) $(OPTS) -O -g -static $(WARNINGS)             $(LINKS) $(INCLUDES) -o $@      $^ $(LIBS)
-	$(GCC) $(OPTS) -O -g -static $(WARNINGS)             $(LINKS) $(INCLUDES) -o $@.html $^ $(LIBS)
+	$(GCC) $(OPTS) -O3 -O -g -static $(WARNINGS)             $(LINKS) $(INCLUDES) -o $@      $^ $(LIBS)
 endif
 
 

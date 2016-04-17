@@ -1,2 +1,17 @@
 old/
 libs/old
+
+*.o
+*.tar.gz
+
+bedGraphToBigWig
+bedToBigBed
+wigToBedGraph
+wigToBed
+wigToBigWig
+
+bedGraphToBigWig_static
+bedToBigBed_static
+wigToBedGraph_static
+wigToBed_static
+wigToBigWig_static
